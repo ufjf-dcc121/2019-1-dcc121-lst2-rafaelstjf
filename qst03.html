@@ -16,11 +16,11 @@
         </div>
     </form>
     <p>
-        Adultos:
+        Adulto:
     </p>
     <ul id="adultos"></ul>
     <p>
-        Estudantes: 
+        Estudante: 
     </p>
     <ul id="estudantes"></ul>
     <script>
@@ -37,11 +37,20 @@
             if (nome.value != "" && idade.value != "" && !isNaN(Number(idade.value))) {
                 //cria um novo elemento com um listener nele
                 var novoElemento = document.createElement("li");
-                novoElemento.textContent = nome.value + " - " + idade.value;
+                novoElemento.innerHTML = "<span>" + nome.value + "</span> - <span>" + idade.value + "</span>";
                 novoElemento.addEventListener("click", function editar() {
                     excluir.type = "button";
-                    novoElemento.contentEditable = true;
-
+                    var editaveis = novoElemento.querySelectorAll("span");
+                    for(var i = 0; i < editaveis.length; i++){
+                        editaveis[i].contentEditable = true;
+                    }
+                });
+                novoElemento.addEventListener("mouseleave", function cancelarEdicao() {
+                    excluir.type = "hide";
+                    var editaveis = novoElemento.querySelectorAll("span");
+                    for(var i = 0; i < editaveis.length; i++){
+                        editaveis[i].contentEditable = false;
+                    }
                 });
                 if (Number(idade.value) >= 18) {
                     listaAdultos.append(novoElemento);
