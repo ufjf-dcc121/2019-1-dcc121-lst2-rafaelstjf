@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <title>Questão 1</title>
+</head>
+
+<body>
+    <form name="formEntrada">
+        <div>
+            <label>Quantidade: <input type="text" name="quantidade" /></label>
+        </div>
+        <div>
+            <label>Item: <input type="text" name="item" /></label>
+        </div>
+    </form>
+    <div>
+        <button id="adicionar">Adicionar</button>
+        <button id="limpar">Limpar</button>
+    </div>
+    <ul id="lista">
+    </ul>
+    <script>
+        var formEntrada = document.forms.formEntrada;
+        var bAdicionar = document.querySelector("#adicionar");
+        var quantidade = formEntrada.quantidade;
+        var item = formEntrada.item;
+        var bLimpar = document.querySelector("#limpar");
+        var lista = document.querySelector("#lista");
+        bAdicionar.addEventListener("click", function adicionarNaLista() {
+            //impede de criar elemento sem valor e se a quantidade é um número
+            if (quantidade.value != "" && !isNaN(Number(quantidade.value)) && item.value != "") {
+                var novoElemento = document.createElement("li");
+                novoElemento.textContent = Number(quantidade.value) + " - " + item.value;
+                lista.appendChild(novoElemento);
+                formEntrada.reset();
+            }
+        });
+        bLimpar.addEventListener("click", function limparLista() {
+                while(lista.childElementCount != 0){
+                    lista.removeChild(lista.lastChild);
+                }
+                formEntrada.reset();
+        })
+    </script>
+</body>
+
+</html>
