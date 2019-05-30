@@ -5,6 +5,7 @@
     <meta charset='utf-8'>
     <title>Questão 2</title>
 </head>
+
 <body>
     <form name="formEntrada">
         <div>
@@ -16,27 +17,27 @@
         <button id="desempilhar">Desempilhar</button>
     </div>
     <ol id="lista">
-        </ul>
-        <script>
-            var formEntrada = document.forms.formEntrada;
-            var bEmpilhar = document.querySelector("#empilhar");
-            var bDesempilhar = document.querySelector("#desempilhar");
-            var lista = document.querySelector("#lista");
-            var entrada = formEntrada.entrada;
-            bEmpilhar.addEventListener("click", function empilharNaLista() {
-                //impede de criar elemento sem valor
-                if (entrada.value != "") {
-                    var novoElemento = document.createElement("li");
-                    novoElemento.textContent = entrada.value;
-                    lista.appendChild(novoElemento);
-                    formEntrada.reset();
-                }
-            });
-            bDesempilhar.addEventListener("click", function desempilharDaLista() {
-                lista.removeChild(lista.lastChild);
+    </ol>
+    <script>
+        var formEntrada = document.forms.formEntrada;
+        var bEmpilhar = document.querySelector("#empilhar");
+        var bDesempilhar = document.querySelector("#desempilhar");
+        var lista = document.querySelector("#lista");
+        var entrada = formEntrada.entrada;
+        bEmpilhar.addEventListener("click", function empilharNaLista() {
+            //impede de criar elemento sem valor
+            if (entrada.value != "") {
+                var novoElemento = document.createElement("li");
+                novoElemento.textContent = entrada.value;
+                lista.insertBefore(novoElemento, lista.firstChild);
                 formEntrada.reset();
-            })
-        </script>
+            }
+        });
+        bDesempilhar.addEventListener("click", function desempilharDaLista() {
+            lista.removeChild(lista.firstChild);
+            formEntrada.reset();
+        })
+    </script>
 </body>
 
 </html>
