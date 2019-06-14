@@ -7,36 +7,42 @@
 </head>
 
 <body>
-    <form name="formEntrada">
-        <div>
+    <div>
+        <form name="formEntrada">
             <label>Nome: <input type="text" name="nome" /></label>
             <label>Idade: <input type="text" name="idade" /></label>
             <input type="submit" name="enviar" />
-        </div>
-    </form>
-    <p>
-        Adulto:
-    </p>
-    <ul id="adultos"></ul>
-    <p>
-        Estudante:
-    </p>
-    <ul id="estudantes"></ul>
+            <input type="hidden" value="Excluir" name="excluir" />
+        </form>
+    </div>
+    <div id="listas">
+        <p>
+            Adulto:
+        </p>
+        <ul id="adultos"></ul>
+        <p>
+            Estudante:
+        </p>
+        <ul id="estudantes"></ul>
+    </div>
     <script>
         var adultos = [];
         var estudantes = [];
+        //elementos do formulario
         var formEntrada = document.forms.formEntrada;
         var enviar = formEntrada.enviar;
-        var excluir = formEntrada.excluir;
-        var listaEstudantes = document.querySelector("#estudantes");
-        var listaAdultos = document.querySelector("#adultos");
         var nome = formEntrada.nome;
         var idade = formEntrada.idade;
+        var excluir = formEntrada.excluir;
+        //listas
+        var listaEstudantes = document.querySelector("#estudantes");
+        var listaAdultos = document.querySelector("#adultos");
+
         enviar.addEventListener("click", function adicionarNaLista(e) {
             e.preventDefault()
             //impede de criar elemento sem valor e idade que não seja número
             if (nome.value != "" && idade.value != "" && !isNaN(Number(idade.value))) {
-                //cria um novo elemento com um listener nele
+                //cria um novo elemento, adiciona no array e atualiza a lista
                 var pessoa = {
                     n: nome.value,
                     i: idade.value
@@ -54,37 +60,43 @@
             }
         });
         function atualizaAdultos() {
-            listaAdultos.children = "";
+            listaAdultos.innerHTML = "";
             for (var i = 0; i < adultos.length; i++) {
                 var novoElemento = document.createElement("li");
                 novoElemento.innerHTML = "<span>" + adultos[i].n + "</span> - <span>" + adultos[i].i + "</span>";
-                novoElemento.addEventListener("click", function editar() {
-                    var botao = document.createElement("button");
-                    botao.textContent = "Excluir";
-                    botao.addEventListener("click", function excluir(e) {
-                       console.log("cliquei"); 
-                    })
-                    novoElemento.appendChild(botao);
-                    var editaveis = novoElemento.querySelectorAll("span");
-                    for (var i = 0; i < editaveis.length; i++) {
-                        editaveis[i].contentEditable = true;
-                    }
-                });
+                novoElemento.addEventListener("click", criaOuvinte(i, 0));
                 listaAdultos.appendChild(novoElemento);
             }
         }
         function atualizaEstudantes() {
-            listaEstudantes.children = "";
+            listaEstudantes.innerHTML = "";
             for (var i = 0; i < estudantes.length; i++) {
                 var novoElemento = document.createElement("li");
                 novoElemento.innerHTML = "<span>" + estudantes[i].n + "</span> - <span>" + estudantes[i].i + "</span>";
-                novoElemento.addEventListener("click", function editar() {
-                    var editaveis = novoElemento.querySelectorAll("span");
-                    for (var i = 0; i < editaveis.length; i++) {
-                        editaveis[i].contentEditable = true;
+                novoElemento.addEventListener("click", criaOuvinte(i, 0));
+                listaEstudantes.appendChild(novoElemento);
+            }
+        }
+        function criaOuvinte(n, tipo) {
+            //tipo 0 = adultos; outro = estudantes
+            return function itemClicado(e) {
+                excluir.type = "button";
+                var editaveis = e.srcElement.parentElement.querySelectorAll("span");
+                for (var j = 0; j < editaveis.length; j++) {
+                    editaveis[j].contentEditable = true;
+                }
+                excluir.addEventListener("click", function excluirElemento() {
+                    console.log(n, tipo);
+                    if (tipo == 0) {
+                        console.log("Adultos length: " + adultos.length);
+                        adultos.splice(n, 1);
+                        console.log("Adultos length: " + adultos.length);
+                        atualizaAdultos();
+                    } else {
+                        estudantes.splice(n, 1);
+                        atualizaEstudantes();
                     }
                 });
-                listaEstudantes.appendChild(novoElemento);
             }
         }
     </script>
