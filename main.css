@@ -1,0 +1,28 @@
+
+#formulario {
+    margin: 0 auto;
+    width: 200px;
+    border-style: dotted;
+    border-width: 1px;
+    padding: 1%;
+    text-align: center;
+}
+#containerTabela{
+    margin: auto 0;
+}
+#tabela {
+    font-size: 18px;
+    text-align: center;
+}
+
+#tabela th {
+    border-style: solid;
+    border-width: 1px;
+    background-color: rgb(210, 255, 253);
+}
+
+#tabela td {
+    background-color: rgb(228, 231, 231);
+    border-style: solid;
+    border-width: 1px;
+}

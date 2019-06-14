@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <title>Questão 4</title>
+</head>
+
+<body>
+    <div id="formulario">
+        <form name="formEntrada">
+            <label>Animal: <input type="text" name="animal" /></label>
+            <label>Altura: <input type="text" name="altura" /></label>
+            <label>Peso: <input type="text" name="peso" /></label>
+            <label>Velocidade: <input type="text" name="velocidade" /></label>
+            <label>Idade máxima: <input type="text" name="idadeMaxima" /></label>
+            <input type="submit" name="enviar" />
+        </form>
+    </div>
+    <div id="containerTabela">
+        <table id="tabela">
+        </table>
+    </div>
+    <div id="containerInformacoes">
+        <p>Maior animal: <span id="maior"></span></p>
+        <p>Animal mais pesado: <span id="mPesado"></span></p>
+        <p>Animal mais veloz: <span id="mVelo"></span></p>
+        <p>Animal mais longevo: <span id="mLonge"></span></p>
+        <p>Número de animais acima da média de peso: <span id="acimaMedia">0</span></p>
+    </div>
+    <script>
+        //elementos do formulario
+        var animais = [];
+        var formEntrada = document.forms.formEntrada;
+        var animal = formEntrada.animal;
+        var altura = formEntrada.altura;
+        var peso = formEntrada.peso;
+        var velocidade = formEntrada.velocidade;
+        var idadeMaxima = formEntrada.idadeMaxima;
+        var enviar = formEntrada.enviar;
+        var tabela = document.querySelector("#tabela");
+        var sMaior = document.querySelector("#maior");
+        var sMPesado = document.querySelector("#mPesado");
+        var sMVelo = document.querySelector("#mVelo");
+        var sMLonge = document.querySelector("#mLonge");
+        var acimaMedia = document.querySelector("#acimaMedia");
+        enviar.addEventListener("click", function AdicionaAnimal(e) {
+            e.preventDefault()
+            if (!verificaVazio() && verificaSeNumero()) {
+                var novoAnimal = {
+                    nome: animal.value,
+                    alt: Number(altura.value),
+                    pes: Number(peso.value),
+                    velo: Number(velocidade.value),
+                    idade: Number(idadeMaxima.value)
+                };
+                animais.push(novoAnimal);
+                formEntrada.reset();
+                atualizaTabela();
+
+            } else {
+                console.log("formulario inválido");
+            }
+        });
+        function verificaSeNumero() {
+            if (isNaN(Number(altura.value)) || isNaN(Number(peso.value)) || isNaN(Number(velocidade.value)) || isNaN(Number(idadeMaxima.value)))
+                return false;
+            else return true;
+        }
+        function verificaVazio() {
+            if (animal.value.length == 0 || altura.value.length == 0 || peso.value.length == 0 || velocidade.value.length == 0 || idadeMaxima.value.length == 0)
+                return true;
+            else return false;
+        }
+        function atualizaTabela() {
+
+            var mediaAltura = 0;
+            var mediaPeso = 0;
+            var mediaVelo = 0;
+            var mediaIdade = 0;
+            var maior;
+            var maisPesado = 0;
+            var maisVeloz = 0;
+            var maisLongevo = 0;
+            if (animais.length > 0) {
+                maior = animais[0];
+                maisPesado = animais[0];
+                maisVeloz = animais[0];
+                maisLongevo = animais[0];
+            }
+            //headers
+            tabela.innerHTML = "<thead><tr><th>Animal</th><th>Altura</th><th>Peso</th><th>Velocidade</th><th>Idade máxima</th></tr></thead>"
+            var tbody = document.createElement("tbody");
+            //dados
+            for (var i = 0; i < animais.length; i++) {
+                var linha = document.createElement("tr");
+                var elAnimal = document.createElement("td");
+                var elAltura = document.createElement("td");
+                var elPeso = document.createElement("td");
+                var elVelocidade = document.createElement("td");
+                var elIdadeMaxima = document.createElement("td");
+                elAnimal.textContent = animais[i].nome;
+                elAltura.textContent = animais[i].alt;
+                elPeso.textContent = animais[i].pes;
+                elVelocidade.textContent = animais[i].velo;
+                elIdadeMaxima.textContent = animais[i].idade;
+                linha.appendChild(elAnimal);
+                linha.appendChild(elAltura);
+                linha.appendChild(elPeso);
+                linha.appendChild(elVelocidade);
+                linha.appendChild(elIdadeMaxima);
+                tbody.appendChild(linha);
+                //medias
+                mediaAltura += animais[i].alt;
+                mediaPeso += animais[i].pes;
+                mediaVelo += animais[i].velo;
+                mediaIdade += animais[i].idade;
+                //maiores
+                if (animais[i].alt > maior.alt)
+                    maior = animais[i];
+                if (animais[i].pes > maisPesado.pes)
+                    maisPesado = animais[i];
+                if (animais[i].velo > maisVeloz.velo)
+                    maisVeloz = animais[i];
+                if (animais[i].idade > maisLongevo.idade)
+                    maisLongevo = animais[i];
+            }
+            mediaAltura = mediaAltura / animais.length;
+            mediaPeso = mediaPeso / animais.length;
+            mediaVelo = mediaVelo / animais.length;
+            mediaIdade = mediaIdade / animais.length;
+            //rodapé
+            tabela.appendChild(tbody);
+            var tFoot = document.createElement("tfoot");
+            tFoot.innerHTML = "<tr><td>Média:</td><td>" + mediaAltura + "</td><td> " + mediaPeso + "</td><td>" + mediaVelo + "</td><td>" + mediaIdade + "</td></tr>";
+            tabela.appendChild(tFoot);
+            //info
+            if (animais.length > 0) {
+                sMaior.textContent = maior.nome;
+                sMPesado.textContent = maisPesado.nome;
+                sMVelo.textContent = maisVeloz.nome;
+                sMLonge.textContent = maisLongevo.nome;
+                var animAM = 0;
+                for (var j = 0; j < animais.length; j++) {
+                    if (animais[j].pes > mediaPeso)
+                        animAM = animAM + 1;
+                    console.log(animais[j].pes);
+                }
+                acimaMedia.textContent = animAM;
+                console.log(animAM);
+            } else {
+                acimaMedia.textContent = "0";
+                sMaior.textContent = "";
+                sMPesado.textContent = "";
+                sMVelo.textContent = "";
+                sMLonge.textContent = "";
+            }
+        }
+
+    </script>
+</body>
+
+</html>
