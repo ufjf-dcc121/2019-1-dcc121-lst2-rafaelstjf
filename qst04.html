@@ -20,6 +20,24 @@
     </div>
     <div id="containerTabela">
         <table id="tabela">
+            <thead>
+                <tr>
+                    <th>Animal</th>
+                    <th>Altura</th>
+                    <th>Peso</th>
+                    <th>Velocidade</th>
+                    <th>Idade máxima</th>
+                </tr>
+            </thead>
+            <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
         </table>
     </div>
     <div id="containerInformacoes">
@@ -90,6 +108,7 @@
                 maisLongevo = animais[0];
             }
             //headers
+
             tabela.innerHTML = "<thead><tr><th>Animal</th><th>Altura</th><th>Peso</th><th>Velocidade</th><th>Idade máxima</th></tr></thead>"
             var tbody = document.createElement("tbody");
             //dados
