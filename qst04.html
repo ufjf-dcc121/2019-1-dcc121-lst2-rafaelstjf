@@ -10,11 +10,11 @@
 <body>
     <div id="formulario">
         <form name="formEntrada">
-            <label>Animal: <input type="text" name="animal" /></label>
-            <label>Altura: <input type="text" name="altura" /></label>
-            <label>Peso: <input type="text" name="peso" /></label>
-            <label>Velocidade: <input type="text" name="velocidade" /></label>
-            <label>Idade máxima: <input type="text" name="idadeMaxima" /></label>
+            <label>Animal: <input type="text" name="animal" required /></label>
+            <label>Altura: <input type="text" name="altura" required /></label>
+            <label>Peso: <input type="text" name="peso" required /></label>
+            <label>Velocidade: <input type="text" name="velocidade" required /></label>
+            <label>Idade máxima: <input type="text" name="idadeMaxima" required /></label>
             <input type="submit" name="enviar" />
         </form>
     </div>
@@ -145,10 +145,8 @@
                 for (var j = 0; j < animais.length; j++) {
                     if (animais[j].pes > mediaPeso)
                         animAM = animAM + 1;
-                    console.log(animais[j].pes);
                 }
                 acimaMedia.textContent = animAM;
-                console.log(animAM);
             } else {
                 acimaMedia.textContent = "0";
                 sMaior.textContent = "";
