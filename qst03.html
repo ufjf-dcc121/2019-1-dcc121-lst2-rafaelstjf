@@ -27,6 +27,7 @@
         <ul id="estudantes"></ul>
     </div>
     <script>
+        var editando = false;
         var adultos = [];
         var estudantes = [];
         //elementos do formulario
@@ -74,20 +75,24 @@
             for (var i = 0; i < estudantes.length; i++) {
                 var novoElemento = document.createElement("li");
                 novoElemento.innerHTML = "<span>" + estudantes[i].n + "</span> - <span>" + estudantes[i].i + "</span>";
-                novoElemento.addEventListener("click", criaOuvinte(i, 0));
+                novoElemento.addEventListener("click", criaOuvinte(i, 1));
                 listaEstudantes.appendChild(novoElemento);
             }
         }
         function criaOuvinte(n, tipo) {
             //tipo 0 = adultos; outro = estudantes
             return function itemClicado(e) {
+                if(!editando){
+                    e.srcElement.parentElement.addEventListener("keyup", criaOuvinte2(n, tipo));
+                    editando = true;
+                }
                 excluir.type = "button";
                 var editaveis = e.srcElement.parentElement.querySelectorAll("span");
                 for (var j = 0; j < editaveis.length; j++) {
+                    editaveis[j].style = "border: 2px solid yellow";
                     editaveis[j].contentEditable = true;
                 }
                 excluir.addEventListener("click", function excluirElemento() {
-                    console.log(n, tipo);
                     if (tipo == 0) {
                         console.log("Adultos length: " + adultos.length);
                         adultos.splice(n, 1);
@@ -98,6 +103,42 @@
                         atualizaEstudantes();
                     }
                 });
+            }
+        }
+        function criaOuvinte2(n, tipo) {
+            //tipo 0 = adultos; outro = estudantes
+            return function itemClicado2(e) {
+                var charCode = (e.which) ? e.which : e.keyCode;
+                console.log(charCode);
+                if (charCode == '13') {
+                    excluir.type = "hidden";
+                    var editaveis = e.srcElement.parentElement.querySelectorAll("span");
+                    for (var j = 0; j < editaveis.length; j++) {
+                        editaveis[j].contentEditable = false;
+                        editaveis[j].style = "none";
+                    }
+                    if (editaveis[0].textContent != "" && editaveis[1].textContent != "" && !isNaN(Number(editaveis[1].textContent))) {
+                        //cria um novo elemento, adiciona no array e atualiza a lista
+                        var pessoa = {
+                            n: editaveis[0].textContent,
+                            i: editaveis[1].textContent
+                        };
+                        if (tipo == 0) {
+                            adultos.splice(n, 1);
+                        } else {
+                            estudantes.splice(n, 1);
+                        }
+                        if (Number(pessoa.i) >= 18) {
+                            adultos.push(pessoa);
+
+                        } else {
+                            estudantes.push(pessoa);
+                        }
+                        atualizaAdultos();
+                        atualizaEstudantes();
+                        editando = false;
+                    }
+                }
             }
         }
     </script>
