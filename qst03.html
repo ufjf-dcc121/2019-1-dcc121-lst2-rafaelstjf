@@ -88,7 +88,7 @@
         function criaOuvinte(n, tipo) {
             //tipo 0 = adultos; outro = estudantes
             return function itemClicado(e) {
-                if(!editando){
+                if (!editando) {
                     e.srcElement.parentElement.addEventListener("keyup", criaOuvinte2(n, tipo));
                     editando = true;
                 }
@@ -98,17 +98,22 @@
                     editaveis[j].style = "border: 2px solid yellow";
                     editaveis[j].contentEditable = true;
                 }
-                excluir.addEventListener("click", function excluirElemento() {
-                    if (tipo == 0) {
-                        console.log("Adultos length: " + adultos.length);
-                        adultos.splice(n, 1);
-                        console.log("Adultos length: " + adultos.length);
-                        atualizaAdultos();
-                    } else {
-                        estudantes.splice(n, 1);
-                        atualizaEstudantes();
-                    }
-                });
+                excluir.addEventListener("click", excluirElemento(n, tipo));
+            }
+        }
+        function excluirElemento(n, tipo) {
+            return function excluirAUX(e) {
+                if (tipo == 0) {
+                    console.log("Adultos length: " + adultos.length);
+                    adultos.splice(n, 1);
+                    console.log("Adultos length: " + adultos.length);
+                    atualizaAdultos();
+                } else {
+                    estudantes.splice(n, 1);
+                    atualizaEstudantes();
+                }
+                e.srcElement.removeEventListener("click", excluirElemento(n, tipo));
+                //e.srcElement.type = "hidden";
             }
         }
         function criaOuvinte2(n, tipo) {
